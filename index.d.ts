@@ -6,7 +6,7 @@ declare module "react-native-audio-record" {
     on: (event: EventOptions, callback: (data: string) => void) => void
   }
   
-  export type EventOptions = "data" | "current-metering1" | "current-metering2";
+  export type EventOptions = "data" | "metering1" | "metering2";
 
   export interface Options {
     sampleRate: number

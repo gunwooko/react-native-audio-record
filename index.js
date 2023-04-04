@@ -10,7 +10,8 @@ AudioRecord.stop = () => RNAudioRecord.stop();
 
 const eventsMap = {
   data: 'data',
-  metering: "current-metering"
+  metering: "current-metering1",
+  metering: "current-metering2"
 };
 
 AudioRecord.on = (event, callback) => {

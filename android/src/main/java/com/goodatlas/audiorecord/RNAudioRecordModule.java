@@ -16,6 +16,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 
 public class RNAudioRecordModule extends ReactContextBaseJavaModule {
 
@@ -103,8 +104,44 @@ public class RNAudioRecordModule extends ReactContextBaseJavaModule {
                     String base64Data;
                     byte[] buffer = new byte[bufferSize];
                     FileOutputStream os = new FileOutputStream(tmpFile);
+                    
+                    // test below
+                    //
+                    //
+                    WritableMap obj = Arguments.createMap();
+
+                    ByteBuffer bufferTest = ByteBuffer.wrap(buffer); // create a ByteBuffer from the array
+                    bufferTest.order(ByteOrder.nativeOrder()); // set the byte order to native endian
+                    int numSamples = buffer.length / 2; // each sample is 2 bytes (16 bits)
+                    //
+                    //
+                    //
 
                     while (isRecording) {
+                    
+                        //
+                        //
+                        //
+                        double sum = 0;
+                        for (int i = 0; i < numSamples; i++) {
+                          short sample = bufferTest.getShort(); // read the next 16-bit sample
+                          sum += sample * sample; // accumulate the sum of squared samples
+                        }
+
+                        double rms = Math.sqrt(sum / numSamples); // compute the root-mean-square value
+                        double maxAmplitude = (Math.pow(2, 16) / 2) - 1; // maximum amplitude for 16-bit data
+                        double dB = 20 * Math.log10(rms / maxAmplitude); // compute the dB level
+
+                        obj.putInt("current_metering", (int) dB);
+                        // System.out.println("dB level: " + dB);
+                        eventEmitter.emit("current-metering1", obj);
+                        eventEmitter.emit("current-metering2", dB);
+                    
+                    // until here
+                    //
+                    //
+                        
+                        
                         bytesRead = recorder.read(buffer, 0, buffer.length);
 
                         // skip first 2 buffers to eliminate "click sound"

@@ -82,7 +82,7 @@ public class RNAudioRecordModule extends ReactContextBaseJavaModule {
         tmpFile = documentDirectoryPath + "/" + "temp.pcm";
         if (options.hasKey("wavFile")) {
             String fileName = options.getString("wavFile");
-            outFile = documentDirectoryPath + "/" + fileName;
+            outFile = "file:///" + documentDirectoryPath + "/" + fileName;
         }
 
         isRecording = false;

@@ -1,6 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 const { RNAudioRecord } = NativeModules;
-const EventEmitter = new NativeEventEmitter(RNAudioRecord);
 
 const AudioRecord = {};
 
@@ -19,6 +18,9 @@ AudioRecord.on = (event, callback) => {
   if (!nativeEvent) {
     throw new Error('Invalid event');
   }
+
+  const EventEmitter = new NativeEventEmitter(RNAudioRecord);
+
   EventEmitter.removeAllListeners(nativeEvent);
   return EventEmitter.addListener(nativeEvent, callback);
 };

@@ -113,14 +113,15 @@ public class RNAudioRecordModule extends ReactContextBaseJavaModule {
                     WritableMap obj = Arguments.createMap();
 
                     ByteBuffer bufferTest = ByteBuffer.wrap(buffer); // create a ByteBuffer from the array
-                    bufferTest.order(ByteOrder.nativeOrder()); // set the byte order to native endian
-                    int numSamples = buffer.length / 2; // each sample is 2 bytes (16 bits)
+
                     //
                     //
                     //
 
                     while (isRecording) {
                         bytesRead = recorder.read(buffer, 0, buffer.length);
+                        bufferTest.order(ByteOrder.nativeOrder()); // set the byte order to native endian
+                        int numSamples = buffer.length / 2; // each sample is 2 bytes (16 bits)
 
                         // skip first 2 buffers to eliminate "click sound"
                         if (bytesRead > 0 && ++count > 2) {

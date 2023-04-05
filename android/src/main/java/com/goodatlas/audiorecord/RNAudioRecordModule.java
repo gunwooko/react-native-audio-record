@@ -120,29 +120,6 @@ public class RNAudioRecordModule extends ReactContextBaseJavaModule {
                     //
 
                     while (isRecording) {
-
-                        //
-                        //
-                        //
-                        double sum = 0;
-                        for (int i = 0; i < numSamples; i++) {
-                            short sample = bufferTest.getShort(); // read the next 16-bit sample
-                            sum += sample * sample; // accumulate the sum of squared samples
-                        }
-
-                        double rms = Math.sqrt(sum / numSamples); // compute the root-mean-square value
-                        double maxAmplitude = (Math.pow(2, 16) / 2) - 1; // maximum amplitude for 16-bit data
-                        double dB = 20 * Math.log10(rms / maxAmplitude); // compute the dB level
-
-                        obj.putInt("current_metering", (int) dB);
-                        // System.out.println("dB level: " + dB);
-                        eventEmitter.emit("metering1", obj);
-                        eventEmitter.emit("metering2", dB);
-
-                        // until here
-                        //
-                        //
-
                         bytesRead = recorder.read(buffer, 0, buffer.length);
 
                         // skip first 2 buffers to eliminate "click sound"
@@ -150,6 +127,28 @@ public class RNAudioRecordModule extends ReactContextBaseJavaModule {
                             base64Data = Base64.encodeToString(buffer, Base64.NO_WRAP);
                             eventEmitter.emit("data", base64Data);
                             os.write(buffer, 0, bytesRead);
+
+                            //
+                            //
+                            //
+                            double sum = 0;
+                            for (int i = 0; i < numSamples; i++) {
+                                short sample = bufferTest.getShort(); // read the next 16-bit sample
+                                sum += sample * sample; // accumulate the sum of squared samples
+                            }
+
+                            double rms = Math.sqrt(sum / numSamples); // compute the root-mean-square value
+                            double maxAmplitude = (Math.pow(2, 16) / 2) - 1; // maximum amplitude for 16-bit data
+                            double dB = 20 * Math.log10(rms / maxAmplitude); // compute the dB level
+
+                            obj.putInt("current_metering", (int) dB);
+                            // System.out.println("dB level: " + dB);
+                            eventEmitter.emit("metering1", obj);
+                            eventEmitter.emit("metering2", dB);
+
+                            // until here
+                            //
+                            //
                         }
                     }
 

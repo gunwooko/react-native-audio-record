@@ -9,8 +9,7 @@ AudioRecord.stop = () => RNAudioRecord.stop();
 
 const eventsMap = {
   data: 'data',
-  metering1: 'metering1'
-  // metering2: "metering2"
+  metering: 'metering',
 };
 
 AudioRecord.on = (event, callback) => {
@@ -21,11 +20,7 @@ AudioRecord.on = (event, callback) => {
   }
 
   if (Platform.OS === 'android') {
-    // // 나중에 이 방식으로도 테스트해보기
-    // const test = DeviceEventEmitter
-    // test.removeAllListeners()
-    const EventEmitter = DeviceEventEmitter.addListener('metering1', callback);
-
+    const EventEmitter = DeviceEventEmitter.addListener(nativeEvent, callback);
     return EventEmitter;
   } else {
     const EventEmitter = new NativeEventEmitter(RNAudioRecord);
